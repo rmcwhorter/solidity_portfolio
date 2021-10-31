@@ -18,8 +18,8 @@ Run npx ts-node scripts/main.ts for a demo.
 
 ## CapTable (./captable)
 
-I wrote this back when we were talking about modeling Cap Tables on chain. No demo scripts, this was mostly just me messing around with OpenZeppelin and seeing how that works. You can see my original voting system code (or the start of it, really), compared with how you would go about implementing ERC-20 with votes on OZ. It's much easier.
+I wrote this back when we were talking about modeling Cap Tables on chain. No demo scripts, this was mostly just me messing around with OpenZeppelin and seeing how that works. You can see my original voting system code (or the start of it, really), compared with how you would go about implementing ERC-20 with votes on OZ. It's much easier. No demos scripts this time, but you can compile it with npx hardhat compile
 
-## Automated Market Maker (./amm)
+## Automated Market Maker (./amm1)
 
 I started this two days ago. I'm still building it, obviously, but you can see how I would go about building an exchange from scratch if I had to. No demos scripts but everything should compile (which is npx hardhat compile).
