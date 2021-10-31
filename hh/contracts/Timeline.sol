@@ -159,9 +159,33 @@ contract Timeline is PMPS, PubSub {
     }
 
     // Owners Only
+    function try_send_message(
+        SignedMessage calldata message, 
+        address target
+    ) public owners_or_self override(PMPS) returns (bool) {
+        // first, we have to check that the target implements ERC165. 
+        // second, we have to preform an ERC165 query to check that the target implements PMPS
+        console.log(address(this), ": [try_send_message]"); // LOGGING
+
+        if (ERC165Checker._supportsERC165(target)) {
+            if (ERC165Checker._supportsInterface(target, this.pmps_interface_id())) {
+                (bool success, bytes memory data) = target.call(abi.encodeWithSelector(this.receive_message.selector, message));
+
+                return success;
+            } else {
+                console.log(address(this), ": [try_send_message] [WARNING]: target address does not suppose PMPS!");
+                return false;
+            }
+        } else {
+                console.log(address(this), ": [try_send_message] [WARNING]: target address does not suppose ERC-165!");
+                return false;
+        }
+    }
+
+    // Owners Only
     function publish(
         SignedMessage calldata message
-    ) external owners_only returns (bool) {
+    ) public owners_or_self returns (bool) {
         console.log(address(this), ": [publish]"); // LOGGING
 
         bool _flag = true;
@@ -170,6 +194,24 @@ contract Timeline is PMPS, PubSub {
         }
 
         return _flag; // returns true if we send to every person successfully. This might be too stringent. 
+    }
+
+    // Owners Only
+    function publish_helper(
+        address originator,
+        string calldata message,
+        bytes32 eth_signed_message_hash,
+        bytes32 r,
+        bytes32 s,
+        uint8 v
+    ) external owners_only returns (bool) {
+        console.log(address(this), ": [publish_helper]"); // LOGGING
+
+        SignedMessage memory itrmsg = SignedMessage(originator, message, eth_signed_message_hash, r, s, v);
+
+        require(verify_signed_message(itrmsg), "Message fails to verify!");
+
+        return this.publish(itrmsg);
     }
 
     // Owners Only
@@ -191,29 +233,7 @@ contract Timeline is PMPS, PubSub {
         return this.try_send_message(itrmsg, target);
     }
 
-    // Owners Only
-    function try_send_message(
-        SignedMessage calldata message, 
-        address target
-    ) external owners_or_self override(PMPS) returns (bool) {
-        // first, we have to check that the target implements ERC165. 
-        // second, we have to preform an ERC165 query to check that the target implements PMPS
-        console.log(address(this), ": [try_send_message]"); // LOGGING
-
-        if (ERC165Checker._supportsERC165(target)) {
-            if (ERC165Checker._supportsInterface(target, this.pmps_interface_id())) {
-                (bool success, bytes memory data) = target.call(abi.encodeWithSelector(this.receive_message.selector, message));
-
-                return success;
-            } else {
-                console.log(address(this), ": [try_send_message] [WARNING]: target address does not suppose PMPS!");
-                return false;
-            }
-        } else {
-                console.log(address(this), ": [try_send_message] [WARNING]: target address does not suppose ERC-165!");
-                return false;
-        }
-    }
+    
 
     function receive_message(
         SignedMessage calldata message

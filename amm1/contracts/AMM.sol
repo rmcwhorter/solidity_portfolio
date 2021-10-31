@@ -148,7 +148,8 @@ contract AMM {
         
         // how do we pick p, subject to current_min_a_to_b_idx <= p <= current_max_a_to_b_price;
         // let's just set it to the average
-        uint256 p = (current_min_a_to_b_idx + current_max_a_to_b_price) >> 1;
+        uint256 current_max_a_to_b_price = 1 / current_min_b_to_a_price; 
+        uint256 p = (current_min_a_to_b_idx + current_max_a_to_b_price) >> 1; // we just take the average
         // ok, so which trade is constraining us?
         uint256 a_source_quantity = orders_a_to_b[current_min_a_to_b_idx]
             .source_quantity_to_sell;

@@ -86,6 +86,21 @@ async function main() {
 
     var msg = sign_message("gm", alice_pk)
     await alice_tl.connect(alice).send_helper(alice.address, "gm", msg.hash, msg.r, msg.s, msg.v, gc.address)
+
+    var msg = sign_message("gm", bob_pk)
+    await bob_tl.connect(bob).send_helper(bob.address, "gm", msg.hash, msg.r, msg.s, msg.v, gc.address)
+
+    var msg = sign_message("gm", charlie_pk)
+    await charlie_tl.connect(charlie).send_helper(charlie.address, "gm", msg.hash, msg.r, msg.s, msg.v, gc.address)
+    
+    console.log("\nLet's subscribe to a few people and test the publish functionality")
+    await alice_tl.connect(alice).intern_request_subscribe(bob_tl.address);
+    await alice_tl.connect(alice).intern_request_subscribe(charlie_tl.address);
+    await bob_tl.connect(bob).intern_request_subscribe(charlie_tl.address);
+    
+    console.log("\n")
+    var msg = sign_message("hello subscribers!", charlie_pk)
+    await charlie_tl.connect(charlie).publish_helper(charlie.address, "hello subscribers!", msg.hash, msg.r, msg.s, msg.v)
     
 }
 
