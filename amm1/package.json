@@ -1,0 +1,20 @@
+{
+  "name": "amm1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier:solidity": "npx prettier --write contracts/**/*.sol"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "hardhat": "^2.6.7",
+    "prettier-plugin-solidity": "^1.0.0-beta.18",
+    "ts-node": "^10.4.0"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
