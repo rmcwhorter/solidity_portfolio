@@ -2,7 +2,7 @@
 
 ## Installation instructions: 
 
-Each directory contains a project I've worked on or am working on. To build any project, cd into it and run npm install 
+Each directory contains a project I've worked on or am working on. To build any project, cd into it and run npm install. Everything can be compiled with npx hardhat compile, but the demo scripts will automatically compile everything for you when you run them.
 
 ## Point Messaing Protocol (./hh)
 
